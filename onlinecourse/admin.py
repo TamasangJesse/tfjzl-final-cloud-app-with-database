@@ -14,6 +14,9 @@ class ChoiceInline(admin.StackedInline):
 
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
+    list_display = ['content', 'course', 'grade']
+    list_filter = ['course']
+    search_fields = ['content']
 
 
 class LessonInline(admin.StackedInline):
@@ -22,11 +25,14 @@ class LessonInline(admin.StackedInline):
 
 
 class LessonAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['title', 'order', 'course']
 
 
 class CourseAdmin(admin.ModelAdmin):
     inlines = [LessonInline, QuestionInline]
+    list_display = ['name', 'pub_date', 'total_enrollment']
+    list_filter = ['pub_date']
+    search_fields = ['name', 'description']
 
 
 admin.site.register(Course, CourseAdmin)
@@ -35,4 +41,5 @@ admin.site.register(Instructor)
 admin.site.register(Learner)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice)
+admin.site.register(Enrollment)
 admin.site.register(Enrollment)
