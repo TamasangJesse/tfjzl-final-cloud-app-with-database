@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Result</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>{{ course.name }} — Exam Result</h2>
+
+    {% if total_score >= 80 %}
+    <div class="alert alert-success">
+        <h4>Congratulations! You passed!</h4>
+        <p>Your score: <strong>{{ total_score }}</strong></p>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        <h4>You did not pass. Keep trying!</h4>
+        <p>Your score: <strong>{{ total_score }}</strong></p>
+    </div>
+    {% endif %}
+
+    <h4>Question Review</h4>
+    {% for question in course.question_set.all %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <strong>{{ question.content }}</strong>
+        </div>
+        <div class="card-body">
+            {% for choice in question.choice_set.all %}
+            <p>
+                {% if choice.id in selected_ids %}
+                    {% if choice.is_correct %}
+                        ✅ <strong>{{ choice.content }}</strong> (Your answer — Correct)
+                    {% else %}
+                        ❌ <strong>{{ choice.content }}</strong> (Your answer — Wrong)
+                    {% endif %}
+                {% else %}
+                    {{ choice.content }}
+                {% endif %}
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <a href="{% url 'onlinecourse:index' %}" class="btn btn-secondary mb-4">Back to Courses</a>
+</div>
+</body>
+</html>
